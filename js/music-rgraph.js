@@ -210,7 +210,7 @@ $(function() {
     }
 
     // Load the json data
-    d3.json('js/music-data.json', function(json) {
+    d3.json('js/input_graph.json', function(json) {
         root = json;
         update();
     });
