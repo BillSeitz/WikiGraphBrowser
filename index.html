@@ -7,9 +7,9 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-	<title>iTunes Music Library Network Graph</title>
-	<meta name="description" content="Experimentation with D3.js force-directed graphs using iTunes library data">
-	<meta name="author" content="Christopher Martin">
+	<title>Wiki Graph Browser</title>
+	<meta name="description" content="Experimentation with D3.js force-directed graphs using BillSeitz WikiGraph data, code forked from  iTunes library data">
+	<meta name="author" content="Bill Seitz">
 	<meta name="viewport" content="width=device-width">
 
     <link rel="canonical" href="http://cgmartin.com/itunes-library-network-graph/">
@@ -19,23 +19,19 @@
     <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
     <script src="http://mbostock.github.com/d3/d3.js"></script>
 
-    <script src="js/music-rgraph.js"></script>
+    <script src="js/wiki_graph.js"></script>
 </head>
 <body>
     <a href="https://github.com/cgmartin/iTunes-Library-Network-Graph"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
     <div id="page">
         <header>
-            <h1>iTunes Music Library Network Graph</h1>
+            <h1>Wiki Graph Browser</h1>
         </header>
         <div role="main">
-            <p>Experimentation with D3.js force-directed graphs using iTunes library data.</p>
+ 	    <p>Browsing Wiki Graph.</p>
+ 	    <p>Experimentation with D3.js force-directed graphs, forked from cgmartin project using iTunes library data.</p>
 
-            <h2>Favorite artists &amp; genres (4/5 stars)</h2>
-
-            <p>Here I've filtered my library down to only the 4 and 5 star songs, grouped by artist and genre. 
-            Artist's songs may span genres (and sub-genres) which makes for a somewhat interesting network graph.</p>
-
-
+   
             <div class="buttons">
                 <button class="first active" id="songsBtn"># of Songs</button><button 
                     class="last" id="playsBtn"># of Plays</button>
