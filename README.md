@@ -1,5 +1,6 @@
-# iTunes Music Library Network Graph
+# WikiGraphBrowser
 
+Forked from cgmartin project.
 
 Experimentation with [D3.js](http://mbostock.github.com/d3/) force-directed 
 graphs using iTunes library data.
@@ -9,8 +10,7 @@ graphs using iTunes library data.
 ## Installation
 
 1. Clone project into a public web server path.
-2. Run `./iTunesGraphParser.py` to scan your iTunes library and write a new ./js/music-data.json file.
-3. Point browser to `index.html` on your web server.
+2. Point browser to `index.html` on your web server.
 
 ### iTunesGraphParser.py
 
