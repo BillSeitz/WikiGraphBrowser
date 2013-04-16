@@ -1,7 +1,7 @@
 $(function() {
 
     var w = 900,
-        h = 500,
+        h = 600,
         node,
         link,
         labels,

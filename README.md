@@ -12,6 +12,12 @@ graphs using iTunes library data.
 1. Clone project into a public web server path.
 2. Point browser to `index.html` on your web server.
 
+### 2 Input files to choose from
+
+CgMartin's code uses int ids for nodes and uses those to define links. I'm hoping to avoid that and just refer to nodes by unique names. But that isn't working now.
+
+If you want the display to work, copy `input_graph_int_id.json` over `input_graph.json`. If you want to experiment with the broken state, use `input_graph_txt_id.json`.
+
 ### iTunesGraphParser.py
 
 A python command line script is included that parses an iTunes library file
