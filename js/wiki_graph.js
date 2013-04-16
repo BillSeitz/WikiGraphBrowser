@@ -24,37 +24,36 @@ $(function() {
     }
 
     function color(d) {
-        return (d.type === 'g') ? '#3182bd' : '#c6dbef';
+        var c
+        if (d.type === 'k') {
+            c = '#0580F5';
+        } else if (d.type === 'w') {
+            c = '#c6dbef';
+        } else {
+            c = '#3182bd';
+        }
+        return c;
     }
 
     function songsTypeSize(d) {
         var s;
-        if (d.type === 'g') {
-            s = d.count / root.maxGenreSongs;
+        if (d.type === 'k') {
+            s = 0.8;
+        } else if (d.type === 'w') {
+            s = 0.5;
         } else {
-            s = d.count / root.maxArtistSongs;
+            s = 0.3;
         }
         return s;
     }
 
     function playsTypeSize(d) {
-        var s;
-        if (d.type === 'g') {
-            s = d.plays / root.maxGenrePlays;
-        } else {
-            s = d.plays / root.maxArtistPlays;
-        }
-        return s;
+        return songsTypeSize(d);
     }
     typeSize = songsTypeSize;
 
     function radius(d) {
-        var r = typeSize(d);
-        if (d.type === 'g') {
-            r = Math.max(r * 40, 4);
-        } else {
-            r = Math.max(r * 25, 2);
-        }
+        var r = typeSize(d) * 15;
         return r;
     }
 
@@ -103,7 +102,7 @@ $(function() {
                         return o === d;
                     })
                     .append('title')
-                    .text(function(o) { return o.name + ' / Songs: ' + o.count + ' / Plays: ' + o.plays; });
+                    .text(function(o) { return o.name ; });
             }
         };
     }
