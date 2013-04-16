@@ -119,6 +119,22 @@ $(function() {
         .attr('height', h);
 
     function update() {
+        // Hack the links struct
+        var node_hash = [];
+        var type_hash = [];
+
+        // Create a hash that allows access to each node by its id
+        root.nodes.forEach(function(d, i) {
+            node_hash[d.id] = d;
+        });
+      
+        // Append the source object node and the target object node to each link
+        root.links.forEach(function(d, i) {
+            d.source = node_hash[d.source];
+            d.target = node_hash[d.target];
+         });
+
+        
         // Restart the force layout
         force
             .nodes(root.nodes)
