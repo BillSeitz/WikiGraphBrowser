@@ -7,6 +7,7 @@ $(function() {
         labels,
         root,
         linkIndexes,
+        clicked_names,
         typeSize;
 
     function tick(e) {
@@ -35,7 +36,7 @@ $(function() {
         return c;
     }
 
-    function songsTypeSize(d) {
+    function nodesTypeSize(d) {
         var s;
         if (d.type === 'k') {
             s = 0.8;
@@ -47,10 +48,7 @@ $(function() {
         return s;
     }
 
-    function playsTypeSize(d) {
-        return songsTypeSize(d);
-    }
-    typeSize = songsTypeSize;
+    typeSize = nodesTypeSize;
 
     function radius(d) {
         var r = typeSize(d) * 15;
@@ -66,7 +64,7 @@ $(function() {
         return linkIndexes[a.index + ',' + b.index] || a.index == b.index;
     }
 
-    function fade(bo) {
+    function fade(bo) { // bo = {True, False}, True mean to turn that node On (fade rest)
         return function(d) {
             var opacity = bo ? 0.2 : 1;
             var rad = radius(d);
@@ -81,11 +79,24 @@ $(function() {
                 return o.source === d || o.target === d ? 1 : opacity;
             });
 
+            i = j = 0;
+            if (!bo) { //bo=False - from mouseout
+                //labels.select('text.label').remove();
+                /*
+                labels.forEach(function(o) {
+                    if (!(d.name in clicked_names)) {
+                        d.text.label.remove();
+                    }
+                }); */
+                labels.filter(function(o) {
+                    return !(o.name in clicked_names);
+                    })
+                    .text(function(o) { return ""; });
+                    j++;
 
-            labels.select('text.label').remove();
-            node.select('title').remove();
+            }
 
-            if (bo) {
+            if (bo) { // from mouseover
                 labels.filter(function(o) {
                         return isConnected(o, d);
                     })
@@ -96,13 +107,15 @@ $(function() {
                     .style('fill', '#C17021')
                     .attr('text-anchor', 'middle')
                     .attr('class', 'label')
-                    .text(function(o) { return (o !== d) ? o.name.substr(0, 16) : ''; });
+                    //.text(function(o) { return (o !== d) ? o.name.substr(0, 16) : ''; });
+                    .text(function(o) { return o.name.substr(0, 16); }); //this turns on label
+                    i++;
 
-                node.filter(function(o) {
+                /*node.filter(function(o) { // this is for turning on 'title' style for moused-over node
                         return o === d;
                     })
                     .append('title')
-                    .text(function(o) { return o.name ; });
+                    .text(function(o) { return o.name ; }); */
             }
         };
     }
@@ -118,20 +131,48 @@ $(function() {
         .attr('width', w)
         .attr('height', h);
 
+    function searchnode(nname) {
+        // alert(nname);
+        // Load the json data
+        clicked_names[clicked_names.length] = nname
+        d3.json(u_root + nname + '.json', function(json) {
+            for (var i = 0; i < json.nodes.length; i++) {
+                var node = json.nodes[i];
+                root.nodes.push(node);
+            };
+            for (var i = 0; i < json.links.length; i++) {
+                var link = json.links[i];
+                root.links.push(link);
+            };
+            update();
+        });
+    }
+
     function update() {
         // Hack the links struct
-        var node_hash = [];
-        var type_hash = [];
+        if (typeof(node_hash) == 'undefined') {
+            node_hash = [];
+            next_node = 0;
+        };
 
         // Create a hash that allows access to each node by its id
-        root.nodes.forEach(function(d, i) {
+        var i;
+        var j = Object.keys(node_hash).length
+        for (i = root.nodes.length - 1; i >= j; i -= 1) {
+            d = root.nodes[i];
+            if (!node_hash[d.id]) {
             node_hash[d.id] = d;
-        });
+            } else {
+                root.nodes.splice(i, 1);
+            }
+        };
       
         // Append the source object node and the target object node to each link
         root.links.forEach(function(d, i) {
-            d.source = node_hash[d.source];
-            d.target = node_hash[d.target];
+            if (typeof(d.source) != "object") {
+				d.source = node_hash[d.source];
+				d.target = node_hash[d.target];
+            };
          });
 
         
@@ -168,6 +209,7 @@ $(function() {
             .attr('r', radius)
             .on('mouseover', fade(true))
             .on('mouseout', fade(false))
+            .on("click", function(d,i) { searchnode(d.name); })
             .call(force.drag);
 
         // Exit any old nodes
@@ -190,41 +232,13 @@ $(function() {
         labels.exit().remove();
 
         // Init fade state
-        node.each(fade(false));
+        //node.each(fade(false));
 
-        // Button toggles
-        $('#songsBtn').click(function() {
-            force.stop();
-
-            typeSize = songsTypeSize;
-
-            vis.selectAll('circle.node')
-                .attr('r', radius);
-
-            force.charge(charge).start();
-
-            $(this).addClass('active');
-            $('#playsBtn').removeClass('active');
-            return false;
-        });
-        $('#playsBtn').click(function() {
-            force.stop();
-
-            typeSize = playsTypeSize;
-            
-            vis.selectAll('circle.node')
-                .attr('r', radius);
-
-            force.charge(charge).start();
-
-            $(this).addClass('active');
-            $('#songsBtn').removeClass('active');
-            return false;
-        });
 
     }
 
     // Load the json data
+    clicked_names = ["FractallyGenerativePatternLanguage", "MakingALiving", "MeaningfulLife", "EconomicTransition"]
     d3.json('js/input_graph.json', function(json) {
         root = json;
         update();
