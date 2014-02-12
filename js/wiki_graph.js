@@ -89,7 +89,7 @@ $(function() {
                     }
                 }); */
                 labels.filter(function(o) {
-                    return !(o.name in clicked_names);
+                    return (clicked_names.indexOf(o.name) < 0);
                     })
                     .text(function(o) { return ""; });
                     j++;
@@ -101,9 +101,6 @@ $(function() {
                         return isConnected(o, d);
                     })
                     .append('svg:text')
-                    .attr('y', function(o) {
-                            return (o == d) ? (rad + 10) + 'px' : '5px';
-                        })
                     .style('fill', '#C17021')
                     .attr('text-anchor', 'middle')
                     .attr('class', 'label')
@@ -111,11 +108,6 @@ $(function() {
                     .text(function(o) { return o.name.substr(0, 16); }); //this turns on label
                     i++;
 
-                /*node.filter(function(o) { // this is for turning on 'title' style for moused-over node
-                        return o === d;
-                    })
-                    .append('title')
-                    .text(function(o) { return o.name ; }); */
             }
         };
     }
